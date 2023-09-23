@@ -1,0 +1,105 @@
+---
+title: "p8105_hw1_jh4617"
+output: github_document
+date: "2023-09-20"
+---
+
+#Problem 1
+
+Load the "moderndive" and "tidyverse" library:
+
+```{r}
+library(moderndive)
+library(tidyverse)
+```
+
+Load the "early_january_weather" dataset:
+
+```{r}
+data("early_january_weather")
+```
+
+The dataset contains variables *`r names(early_january_weather)`*.
+
+There are *`r nrow(early_january_weather)`* of rows.
+
+There are *`r ncol(early_january_weather)`* of columns.
+
+The mean temperature is equal to *`r mean(pull(early_january_weather, temp))`*
+
+
+
+Make a scatterplot of "temp" (y) vs "time_hour" (x); color points using "humid" variable.
+
+```{r}
+ggplot(early_january_weather, aes(x=time_hour, y=temp,color=humid)) + geom_point()
+```
+
+Describe patterns that are apparent in this plot:
+
+As the time_hour increases, the temperature fluctuating increase , but after about Jan 15, the temperature sharply dropped.
+The humidity is relatively high between Jan 12 to Jan 14.
+
+
+Export scatterplot to project directory:
+
+```{r}
+ggsave("scatterplot.png")
+```
+
+# problem 2
+
+Create a data frame
+
+```{r}
+df_p2 = 
+  tibble(
+    num_samp = rnorm (10),
+    log_vet = num_samp > 0,
+    char_vet = c("A", "B", "C", "D", "E", "F", "G", "H", "I", "J"),
+    fac_vet = factor(c("level A", "level A", "level A", "level A", "level B", "level B", "level B", "level C", "level C", "level C"))
+)
+
+print(df_p2)
+
+```
+
+Calculate the mean of each variable in dataframe.
+
+```{r}
+mean(pull(df_p2,num_samp))
+
+mean(pull(df_p2,log_vet))
+
+mean(pull(df_p2,char_vet))
+
+mean(pull(df_p2,fac_vet))
+```
+
+What works and what doesn't?
+
+The numeric variable works
+
+The logical vector works
+
+The character vector does not work
+
+The factor vector does not work
+
+
+Write a code chunk that applies the "as.numeric" function to the logical, character, and factor variables:
+
+```{r results = 'hide', message = FALSE, warning = FALSE}
+as.numeric(pull(df_p2,log_vet))
+
+as.numeric(pull(df_p2,char_vet))
+
+as.numeric(pull(df_p2,fac_vet))
+```
+
+
+Logical vector and factor vector can be explicitly converted to numeric variable. However, character vector fails to do so.
+
+The result partially explains what happens when I try to take the mean. Since character vector cannot be converted into numeric vector, the mean of this character vector cannot be calcualted. On the other hand, the factor vector can be explicitly converted into numeric vector by using as.numeric function, but the mean of this factor vector cannot be calculated if directly using the "pull" function.
+
+
